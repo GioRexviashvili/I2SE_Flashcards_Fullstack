@@ -44,7 +44,10 @@ export function drawApproximateCircle(
   radius: number,
   numSides: number
 ): void {
-  // TODO: Implement drawApproximateCircle
+  for (let i = 0; i < numSides; i++) {
+    turtle.turn(360 / numSides);
+    turtle.forward(chordLength(radius, 360 / numSides));
+  }
 }
 
 /**
