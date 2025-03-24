@@ -70,8 +70,22 @@ export function distance(p1: Point, p2: Point): number {
  *          The function primarily needs to *calculate* the path conceptually.
  */
 export function findPath(turtle: Turtle, points: Point[]): string[] {
-  // TODO: Implement findPath (conceptually, you don't need to *execute* the path here)
-  return []; // Placeholder
+  
+  const ans = [];
+   let startPoint = { x: 0, y: 0, angle: 0 };
+   for (const point of points) {
+     const forward = distance(startPoint, point);
+     const turnInDegree =
+       Math.atan((point.y - startPoint.y) / (point.x - startPoint.x)) *
+       (180 / Math.PI);
+     turtle.turn(turnInDegree);
+     turtle.forward(forward);
+ 
+     startPoint = { ...point, angle: turtle.getHeading() };
+ 
+     ans.push(`forward ${forward} turn ${turnInDegree}`);
+   }
+   return ans;
 }
 
 /**
