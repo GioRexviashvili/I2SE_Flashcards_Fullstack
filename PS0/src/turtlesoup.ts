@@ -96,12 +96,16 @@ export function findPath(turtle: Turtle, points: Point[]): string[] {
  * @param turtle The turtle to use.
  */
 export function drawPersonalArt(turtle: Turtle): void {
-  // TODO: Implement drawPersonalArt
-  // Example - replace with your own art!
-  for (let i = 0; i < 6; i++) {
-    turtle.forward(50);
-    turtle.turn(60);
-  }
+  const colors: Color[] = ["red", "green", "blue", "yellow", "purple", "cyan", "magenta", "orange"];
+   
+  for (let i = 0; i < 8; i++) {
+    turtle.color(colors[i % colors.length]);
+    for (let j = 0; j < 6; j++) {
+      turtle.forward(50);
+      turtle.turn(60);
+    }
+    turtle.turn(45); // Rotate for next shape
+}
 }
 
 function generateHTML(
@@ -186,12 +190,12 @@ export function main(): void {
   // console.log("Distance between p1 and p2:", distance(p1, p2));
 
   // Example findPath (conceptual - prints path to console)
-  // const pointsToVisit: Point[] = [{x: 20, y: 20}, {x: 80, y: 20}, {x: 80, y: 80}];
-  // const pathInstructions = findPath(turtle, pointsToVisit);
-  // console.log("Path instructions:", pathInstructions);
+   const pointsToVisit: Point[] = [{x: 20, y: 20}, {x: 80, y: 20}, {x: 80, y: 80}];
+   const pathInstructions = findPath(turtle, pointsToVisit);
+   console.log("Path instructions:", pathInstructions);
 
   // Draw personal art
-  // drawPersonalArt(turtle);
+   drawPersonalArt(turtle);
 
   const htmlContent = generateHTML((turtle as SimpleTurtle).getPath()); // Cast to access getPath
   saveHTMLToFile(htmlContent);
