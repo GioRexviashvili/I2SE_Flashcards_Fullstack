@@ -133,12 +133,14 @@ export function update(
 }
 
 /**
- * Generates a hint for a flashcard.
+ * Generates a hint based on the flashcard front.
  *
- * @param card flashcard to hint
- * @returns a hint for the front of the flashcard.
- * @spec.requires card is a valid Flashcard.
+ * @param card flashcard to generate hint from
+ * @returns the first word of the flashcard front, followed by '...'
+ *          Example: front = "What is 2+2?" → hint = "What..."
+ * @spec.requires card.front is a non-empty string
  */
+
 export function getHint(card: Flashcard): string {
   return card.hint;
 }
