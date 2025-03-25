@@ -242,13 +242,18 @@ describe("update()", () => {
  *
  * TODO: Describe your testing strategy for getHint() here.
  */
-describe("getHint()", () => {
-  it("should return the original hint field from the Flashcard", () => {
-    const card = new Flashcard("What is 2+2?", "4", "It's a small even number", []);
-    expect(getHint(card)).to.equal(card.hint);
+describe("getHint() - strong spec", () => {
+  it("should return the first word of the front with ellipsis", () => {
+    const card = new Flashcard("Capital of France?", "Paris", "not used", []);
+    expect(getHint(card)).to.equal("Capital...");
   });
 
+  it("should return full word with ellipsis when front is one word", () => {
+    const card = new Flashcard("Photosynthesis", "Process", "not used", []);
+    expect(getHint(card)).to.equal("Photosynthesis...");
+  });
 });
+
 
 /*
  * Testing strategy for computeProgress():
