@@ -261,9 +261,43 @@ describe("getHint() - strong spec", () => {
  * TODO: Describe your testing strategy for computeProgress() here.
  */
 describe("computeProgress()", () => {
-  it("Example test case - replace with your own tests", () => {
-    assert.fail(
-      "Replace this test case with your own tests based on your testing strategy"
-    );
+  it("should return correct stats for basic data", () => {
+    const card1 = createGeneralCard("card1");
+    const card2 = createGeneralCard("card2");
+    const card3 = createGeneralCard("card3");
+
+    const buckets: BucketMap = new Map();
+    buckets.set(0, new Set([card1]));
+    buckets.set(1, new Set([card2, card3]));
+
+    const history = [
+      { card: card1, difficulty: AnswerDifficulty.Easy },
+      { card: card2, difficulty: AnswerDifficulty.Wrong },
+      { card: card3, difficulty: AnswerDifficulty.Hard },
+    ];
+
+    const expected = {
+      totalFlashcards: 3,
+      bucketDistribution: { 0: 1, 1: 2 },
+      accuracyRate: 2 / 3,
+      reviewsPerBucket: { 0: 1, 1: 2 },
+    };
+
+    expect(computeProgress(buckets, history)).to.deep.equal(expected);
+  });
+
+  it("should return zero stats when everything is empty", () => {
+    const buckets: BucketMap = new Map();
+    const history: Array<{ card: Flashcard, difficulty: AnswerDifficulty }> = [];
+
+    const expected = {
+      totalFlashcards: 0,
+      bucketDistribution: {},
+      accuracyRate: 0,
+      reviewsPerBucket: {},
+    };
+
+    expect(computeProgress(buckets, history)).to.deep.equal(expected);
   });
 });
+
