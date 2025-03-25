@@ -163,8 +163,51 @@ export function getHint(card: Flashcard): string {
  *   - `history` contains only cards that appear in some bucket.
  */
 
-export function computeProgress(buckets: any, history: any): any {
-  // Replace 'any' with appropriate types
-  // TODO: Implement this function (and define the spec!)
-  throw new Error("Implement me!");
+export function computeProgress(
+  buckets: BucketMap,
+  history: Array<{ card: Flashcard; difficulty: AnswerDifficulty }>
+): {
+  totalFlashcards: number;
+  bucketDistribution: Record<number, number>;
+  accuracyRate: number;
+  reviewsPerBucket: Record<number, number>;
+} {
+  const bucketDistribution: Record<number, number> = {};
+  const reviewsPerBucket: Record<number, number> = {};
+  let correctAnswers = 0;
+  const allCards = new Set<Flashcard>();
+
+  // Count total cards and distribution
+  for (const [bucketNum, cards] of buckets.entries()) {
+    bucketDistribution[bucketNum] = cards.size;
+    cards.forEach((card) => allCards.add(card));
+  }
+
+  // Count review history
+  for (const entry of history) {
+    const card = entry.card;
+    const difficulty = entry.difficulty;
+
+    // Find which bucket this card is in
+    for (const [bucketNum, cards] of buckets.entries()) {
+      if (cards.has(card)) {
+        reviewsPerBucket[bucketNum] = (reviewsPerBucket[bucketNum] || 0) + 1;
+        break;
+      }
+    }
+
+    if (difficulty !== AnswerDifficulty.Wrong) {
+      correctAnswers += 1;
+    }
+  }
+
+  const accuracyRate = history.length === 0 ? 0 : correctAnswers / history.length;
+
+  return {
+    totalFlashcards: allCards.size,
+    bucketDistribution,
+    accuracyRate,
+    reviewsPerBucket,
+  };
 }
+
