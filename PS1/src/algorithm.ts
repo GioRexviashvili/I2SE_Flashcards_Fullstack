@@ -142,8 +142,10 @@ export function update(
  */
 
 export function getHint(card: Flashcard): string {
-  return card.hint;
+  const firstWord = card.front.trim().split(" ")[0];
+  return firstWord + "...";
 }
+
 
 /**
  * Computes statistics about the user's learning progress.
