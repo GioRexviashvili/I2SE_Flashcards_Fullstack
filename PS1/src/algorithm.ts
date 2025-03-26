@@ -77,8 +77,8 @@ export function practice(
   const reviewSet = new Set<Flashcard>();
 
   buckets.forEach((cards, bucketIndex) => {
-    if ((day + 1) % 2 ** bucketIndex === 0) {
-      cards.forEach((card) => reviewSet.add(card));
+    if (day % (2 ** bucketIndex) === 0) {
+      cards.forEach(card => reviewSet.add(card));
     }
   });
 

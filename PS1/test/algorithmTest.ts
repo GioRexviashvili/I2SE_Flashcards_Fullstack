@@ -119,7 +119,7 @@ describe("practice()", () => {
   it("should return empty set if there are no flashcards", () => {
     const buckets: Array<Set<Flashcard>> = [];
 
-    expect(practice(buckets, 0)).to.deep.equal(new Set());
+    expect(practice(buckets, 1)).to.deep.equal(new Set());
     expect(practice(buckets, 3)).to.deep.equal(new Set());
     expect(practice(buckets, 1)).to.deep.equal(new Set());
     expect(practice(buckets, 30)).to.deep.equal(new Set());
@@ -135,7 +135,7 @@ describe("practice()", () => {
       new Set([card1, card2, card3]), // Bucket 0 (review daily)
     ];
 
-    expect(practice(buckets, 0)).to.deep.equal(zeroBucketList);
+    expect(practice(buckets, 1)).to.deep.equal(zeroBucketList);
     expect(practice(buckets, 3)).to.deep.equal(zeroBucketList);
     expect(practice(buckets, 23)).to.deep.equal(zeroBucketList);
   });
@@ -147,6 +147,7 @@ describe("practice()", () => {
     const card4 = createGeneralCard("card4");
     const card5 = createGeneralCard("card5");
     const card6 = createGeneralCard("card6");
+    const card7 = createGeneralCard("card7");
     
     const zeroBucketList = new Set([card1, card2, card3]);
 
@@ -154,17 +155,16 @@ describe("practice()", () => {
 
     const buckets: Array<Set<Flashcard>> = [
       zeroBucketList,
-      new Set(),
+      new Set([card7]),
       thirdBucketList,
       new Set(),
       new Set([card6])
     ];
 
-    expect(practice(buckets, 0)).to.deep.equal(zeroBucketList);
     expect(practice(buckets, 1)).to.deep.equal(zeroBucketList);
-    expect(practice(buckets, 3)).to.deep.equal([zeroBucketList, thirdBucketList]);
-    expect(practice(buckets, 15)).to.deep.equal([zeroBucketList, thirdBucketList, card6]);
-
+    expect(practice(buckets, 2)).to.deep.equal(new Set([card1, card2, card3, card7]));
+    expect(practice(buckets, 3)).to.deep.equal(zeroBucketList);
+    expect(practice(buckets, 32)).to.deep.equal(new Set([card1, card2, card3, card7, card4, card5, card6]));
   });
 });
 
