@@ -10,6 +10,8 @@
 
 import { Flashcard, AnswerDifficulty, BucketMap } from "./flashcards";
 
+import { PracticeRecord, ProgressStats } from "../types";
+
 /**
  * Converts a Map representation of learning buckets into an Array-of-Set representation.
  *
@@ -164,50 +166,47 @@ export function getHint(card: Flashcard): string {
  */
 
 export function computeProgress(
-  buckets: BucketMap,
-  history: Array<{ card: Flashcard; difficulty: AnswerDifficulty }>
-): {
-  totalFlashcards: number;
-  bucketDistribution: Record<number, number>;
-  accuracyRate: number;
-  reviewsPerBucket: Record<number, number>;
-} {
+  buckets: BucketMap, 
+  history: PracticeRecord[]
+): ProgressStats {
+
   const bucketDistribution: Record<number, number> = {};
   const reviewsPerBucket: Record<number, number> = {};
+  let totalFlashcards = 0;
   let correctAnswers = 0;
-  const allCards = new Set<Flashcard>();
 
-  // Count total cards and distribution
-  for (const [bucketNum, cards] of buckets.entries()) {
-    bucketDistribution[bucketNum] = cards.size;
-    cards.forEach((card) => allCards.add(card));
+  // 1. Calculate totalFlashcards and bucketDistribution from the current buckets state
+  // We iterate through the map representing the *current* distribution of cards
+  for (const [bucketNum, cardsInBucket] of buckets.entries()) {
+    const count = cardsInBucket.size;
+    bucketDistribution[bucketNum] = count;
+    totalFlashcards += count;
+    // Initialize reviewsPerBucket for known buckets, in case some buckets had no reviews in history
+    if (!(bucketNum in reviewsPerBucket)) {
+        reviewsPerBucket[bucketNum] = 0;
+    }
   }
 
-  // Count review history
-  for (const entry of history) {
-    const card = entry.card;
-    const difficulty = entry.difficulty;
+  // 2. Process the history to calculate accuracyRate and reviewsPerBucket
+  for (const record of history) {
+    // Increment review count for the bucket the card *was in* before the review
+    const sourceBucket = record.previousBucket;
+    reviewsPerBucket[sourceBucket] = (reviewsPerBucket[sourceBucket] || 0) + 1;
 
-    // Find which bucket this card is in
-    for (const [bucketNum, cards] of buckets.entries()) {
-      if (cards.has(card)) {
-        reviewsPerBucket[bucketNum] = (reviewsPerBucket[bucketNum] || 0) + 1;
-        break;
-      }
-    }
-
-    if (difficulty !== AnswerDifficulty.Wrong) {
+    // Check if the answer was correct (Easy or Hard)
+    if (record.difficulty === AnswerDifficulty.Easy || record.difficulty === AnswerDifficulty.Hard) {
       correctAnswers += 1;
     }
   }
 
+  // 3. Calculate accuracyRate (handle division by zero if history is empty)
   const accuracyRate = history.length === 0 ? 0 : correctAnswers / history.length;
 
+  // 4. Return the results conforming to the ProgressStats interface
   return {
-    totalFlashcards: allCards.size,
+    totalFlashcards,
     bucketDistribution,
     accuracyRate,
     reviewsPerBucket,
   };
 }
-
