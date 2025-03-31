@@ -171,3 +171,43 @@ export function incrementDay(): void {
   console.log(`Advanced to day: ${currentDay}`); // Log day change
 }
 
+// --- Helper Functions (Optional but Recommended) ---
+// These functions make common tasks easier when interacting with the state.
+
+/**
+ * finds and returns Flashcard with corresponding front and back.
+ *
+ * @param front string which indicates first side of the card
+ * @param back string which indicates second side of the card
+ * @returns Flashcard if there exist such flashcard with these front and back
+ * @returns undefined if there does not exist such flashcard
+ */
+export function findCard(front: string, back: string): Flashcard | undefined {
+  initialCards.forEach((card: Flashcard) => {
+    if (card.front === front && card.back === back) return card;
+  });
+
+  return undefined;
+}
+
+/**
+ * finds and returns index of bucket to which this flashcard belongs.
+ *
+ * @param cardToFind flashcard which's buckets whould be found.
+ * @returns number if this flashcard exists in one of the buckets
+ * @returns undedined if this flashcard does not exist in any bucket
+ */
+export function findCardBucket(cardToFind: Flashcard): number | undefined {
+  currentBuckets.forEach((buck, numb) => {
+    if (buck.has(cardToFind)) return numb;
+  });
+  return undefined;
+}
+
+// --- Confirmation Log ---
+// This runs once when the server starts and loads this file.
+// Useful for confirming that the initial state was set up.
+console.log(
+  `Initial state loaded. ${initialCards.length} cards in bucket 0. Current day: ${currentDay}`
+);
+console.log("Initial buckets:", currentBuckets); // Log the initial map structure
