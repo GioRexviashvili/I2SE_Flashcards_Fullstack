@@ -118,3 +118,57 @@ currentBuckets.set(0, new Set(initialCards));
 let practiceHistory: PracticeRecord[] = [];
 let currentDay: number = 0;
 
+// --- State Accessors & Mutators ---
+// These are functions that other parts of our backend (like server.ts) will use
+// to READ or CHANGE the state variables. This is good practice because it
+// controls how the state is accessed and modified, preventing accidental errors.
+
+/**
+ * Gets the current state of all learning buckets.
+ * @returns The BucketMap representing the current buckets.
+ */
+export function getBuckets(): BucketMap {
+    return currentBuckets;
+  }
+  
+  /**
+   * Updates the entire bucket map.
+   * @param newBuckets The new BucketMap to set.
+   */
+  export function setBuckets(newBuckets: BucketMap): void {
+    currentBuckets = newBuckets;
+  }
+  
+  /**
+   * Gets history of all practices.
+   * @returns Array of practiceRecords
+   */
+  export function getHistory() {
+    return practiceHistory;
+  }
+  
+  /**
+   * Adds a single practice record into practiceHistory
+   * @param PracticeRecord record of single card practice
+   */
+  export function addHistoryRecord(record: PracticeRecord) {
+    practiceHistory.push(record);
+  }
+  
+  /**
+   * Gets the current day number for the learning process.
+   * @returns The current day number.
+   */
+  export function getCurrentDay(): number {
+    return currentDay;
+  }
+  
+  /**
+   * Increments the current day number by 1.
+   */
+  export function incrementDay(): void {
+    currentDay += 1;
+    console.log(`Advanced to day: ${currentDay}`); // Log day change
+  }
+  
+  
