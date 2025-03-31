@@ -128,47 +128,46 @@ let currentDay: number = 0;
  * @returns The BucketMap representing the current buckets.
  */
 export function getBuckets(): BucketMap {
-    return currentBuckets;
-  }
-  
-  /**
-   * Updates the entire bucket map.
-   * @param newBuckets The new BucketMap to set.
-   */
-  export function setBuckets(newBuckets: BucketMap): void {
-    currentBuckets = newBuckets;
-  }
-  
-  /**
-   * Gets history of all practices.
-   * @returns Array of practiceRecords
-   */
-  export function getHistory() {
-    return practiceHistory;
-  }
-  
-  /**
-   * Adds a single practice record into practiceHistory
-   * @param PracticeRecord record of single card practice
-   */
-  export function addHistoryRecord(record: PracticeRecord) {
-    practiceHistory.push(record);
-  }
-  
-  /**
-   * Gets the current day number for the learning process.
-   * @returns The current day number.
-   */
-  export function getCurrentDay(): number {
-    return currentDay;
-  }
-  
-  /**
-   * Increments the current day number by 1.
-   */
-  export function incrementDay(): void {
-    currentDay += 1;
-    console.log(`Advanced to day: ${currentDay}`); // Log day change
-  }
-  
-  
+  return currentBuckets;
+}
+
+/**
+ * Updates the entire bucket map.
+ * @param newBuckets The new BucketMap to set.
+ */
+export function setBuckets(newBuckets: BucketMap): void {
+  currentBuckets = newBuckets;
+}
+
+/**
+ * Gets history of all practices.
+ * @returns Array of practiceRecords
+ */
+export function getHistory() {
+  return practiceHistory;
+}
+
+/**
+ * Adds a single practice record into practiceHistory
+ * @param PracticeRecord record of single card practice
+ */
+export function addHistoryRecord(record: PracticeRecord) {
+  practiceHistory.push(record);
+}
+
+/**
+ * Gets the current day number for the learning process.
+ * @returns The current day number.
+ */
+export function getCurrentDay(): number {
+  return currentDay;
+}
+
+/**
+ * Increments the current day number by 1.
+ */
+export function incrementDay(): void {
+  currentDay += 1;
+  console.log(`Advanced to day: ${currentDay}`); // Log day change
+}
+
