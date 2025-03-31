@@ -79,8 +79,8 @@ export function practice(
   const reviewSet = new Set<Flashcard>();
 
   buckets.forEach((cards, bucketIndex) => {
-    if (day % (2 ** bucketIndex) === 0) {
-      cards.forEach(card => reviewSet.add(card));
+    if (day % 2 ** bucketIndex === 0) {
+      cards.forEach((card) => reviewSet.add(card));
     }
   });
 
@@ -111,7 +111,7 @@ export function update(
   for (const [index, cards] of updatedBuckets.entries()) {
     if (cards.has(card)) {
       currentBucket = index;
-      cards.delete(card); 
+      cards.delete(card);
       break;
     }
   }
@@ -121,15 +121,19 @@ export function update(
     newBucket = 0;
   } else if (difficulty === AnswerDifficulty.Hard) {
     newBucket = Math.max(0, currentBucket - 1);
-  } else { 
+  } else {
     newBucket = currentBucket + 1;
   }
 
-  if (!updatedBuckets.has(newBucket)) {
-    updatedBuckets.set(newBucket, new Set());
+  // when card is in bucket 4 and answerdifficulty was easy this bucket reached retired bucket
+  // 
+  if (newBucket < 4) {
+    // Ensure the new bucket exists
+    if (!updatedBuckets.has(newBucket)) {
+      updatedBuckets.set(newBucket, new Set());
+    }
+    updatedBuckets.get(newBucket)!.add(card);
   }
-
-  updatedBuckets.get(newBucket)!.add(card);
 
   return updatedBuckets;
 }
@@ -148,7 +152,6 @@ export function getHint(card: Flashcard): string {
   return firstWord + "...";
 }
 
-
 /**
  * Computes statistics about the user's learning progress.
  *
@@ -166,10 +169,9 @@ export function getHint(card: Flashcard): string {
  */
 
 export function computeProgress(
-  buckets: BucketMap, 
+  buckets: BucketMap,
   history: PracticeRecord[]
 ): ProgressStats {
-
   const bucketDistribution: Record<number, number> = {};
   const reviewsPerBucket: Record<number, number> = {};
   let totalFlashcards = 0;
@@ -183,7 +185,7 @@ export function computeProgress(
     totalFlashcards += count;
     // Initialize reviewsPerBucket for known buckets, in case some buckets had no reviews in history
     if (!(bucketNum in reviewsPerBucket)) {
-        reviewsPerBucket[bucketNum] = 0;
+      reviewsPerBucket[bucketNum] = 0;
     }
   }
 
@@ -194,13 +196,17 @@ export function computeProgress(
     reviewsPerBucket[sourceBucket] = (reviewsPerBucket[sourceBucket] || 0) + 1;
 
     // Check if the answer was correct (Easy or Hard)
-    if (record.difficulty === AnswerDifficulty.Easy || record.difficulty === AnswerDifficulty.Hard) {
+    if (
+      record.difficulty === AnswerDifficulty.Easy ||
+      record.difficulty === AnswerDifficulty.Hard
+    ) {
       correctAnswers += 1;
     }
   }
 
   // 3. Calculate accuracyRate (handle division by zero if history is empty)
-  const accuracyRate = history.length === 0 ? 0 : correctAnswers / history.length;
+  const accuracyRate =
+    history.length === 0 ? 0 : correctAnswers / history.length;
 
   // 4. Return the results conforming to the ProgressStats interface
   return {
