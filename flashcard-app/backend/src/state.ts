@@ -1,7 +1,7 @@
 // --- Imports ---
 
 // We need these types to define the structure of our state variables.
-import { Flashcard, BucketMap, AnswerDifficulty } from "@logic/flashcards";
+import { Flashcard, BucketMap, AnswerDifficulty } from "./logic/flashcards";
 import { PracticeRecord } from "./types";
 
 // let create initial cards
@@ -183,9 +183,10 @@ export function incrementDay(): void {
  * @returns undefined if there does not exist such flashcard
  */
 export function findCard(front: string, back: string): Flashcard | undefined {
-  initialCards.forEach((card: Flashcard) => {
-    if (card.front === front && card.back === back) return card;
-  });
+  for (let i = 0; i < initialCards.length; i++){
+    if (initialCards[i].front == front && initialCards[i].back == back)
+      return initialCards[i];
+  }
 
   return undefined;
 }

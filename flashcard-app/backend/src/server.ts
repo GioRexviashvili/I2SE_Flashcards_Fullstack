@@ -10,8 +10,8 @@ import {
   update,
   getHint,
   computeProgress,
-} from "@logic/algorithm";
-import { Flashcard, AnswerDifficulty, BucketMap } from "@logic/flashcards"; // Import core types/enums
+} from "./logic/algorithm";
+import { Flashcard, AnswerDifficulty, BucketMap } from "./logic/flashcards"; // Import core types/enums
 
 // --- State Imports ---
 // Import functions to interact with our in-memory state
