@@ -132,5 +132,5 @@ export async function advanceDay(): Promise<number> {
 
 // Add a helper function to check for Axios errors for more specific handling
 export function isApiError(error: unknown): error is AxiosError {
-    return axios.isAxiosError(error);
+  return axios.isAxiosError(error);
 }

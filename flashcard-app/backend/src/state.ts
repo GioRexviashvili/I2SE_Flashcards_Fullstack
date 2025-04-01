@@ -18,7 +18,7 @@ const initialCards: Flashcard[] = [
     "Eiffel Tower city",
     ["geography"]
   ),
-  new Flashcard("13 * 11", "4", "sum of digits of 13 place between of ones", [
+  new Flashcard("13 * 11", "141", "sum of digits of 13 place between of ones", [
     "math",
   ]),
   new Flashcard(
@@ -183,7 +183,7 @@ export function incrementDay(): void {
  * @returns undefined if there does not exist such flashcard
  */
 export function findCard(front: string, back: string): Flashcard | undefined {
-  for (let i = 0; i < initialCards.length; i++){
+  for (let i = 0; i < initialCards.length; i++) {
     if (initialCards[i].front == front && initialCards[i].back == back)
       return initialCards[i];
   }
@@ -203,6 +203,21 @@ export function findCardBucket(cardToFind: Flashcard): number | undefined {
     if (currentBuckets.get(i)?.has(cardToFind)) return i;
   }
   return undefined;
+}
+
+/**
+ * Checks if all cards are in retired bucket
+ */
+export function isBucketMapEmpty(): boolean {
+  if (
+    currentBuckets.get(0)?.size == 0 &&
+    currentBuckets.get(1)?.size == 0 &&
+    currentBuckets.get(2)?.size == 0 &&
+    currentBuckets.get(3)?.size == 0
+  )
+    return true;
+
+  return false;
 }
 
 // --- Confirmation Log ---

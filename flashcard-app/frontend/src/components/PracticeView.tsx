@@ -24,6 +24,7 @@ function PracticeView() {
   const [error, setError] = useState<string | null>(null);
   const [day, setDay] = useState<number>(0); // Will be updated from API
   const [sessionFinished, setSessionFinished] = useState<boolean>(false);
+  const [retiredBucket, setRetiredBucket] = useState<boolean>(false);
 
   const [hint, setHint] = useState<string | null>(null);
   const [loadingHint, setLoadingHint] = useState(false);
@@ -44,6 +45,10 @@ function PracticeView() {
       console.log("PracticeView: Data received:", result);
       setPracticeCards(result.cards);
       setDay(result.day);
+
+      if (result.retired) {
+        setRetiredBucket(true); // No cards to practice today
+      }
 
       if (result.cards.length === 0) {
         console.log(
@@ -155,6 +160,15 @@ function PracticeView() {
   // 2. Handle Error State
   if (error) {
     return <div style={{ color: "red" }}>Error: {error}</div>;
+  }
+
+  if (retiredBucket) {
+    return (
+      <div className="session-finished">
+        <div className="day-counter">Day {day}</div>
+        <p>Congrats! You have learned all Flashcards!</p>
+      </div>
+    );
   }
 
   // 3. Handle Session Finished State

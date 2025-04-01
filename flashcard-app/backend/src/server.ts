@@ -24,6 +24,7 @@ import {
   incrementDay,
   findCard,
   findCardBucket,
+  isBucketMapEmpty,
 } from "./state";
 
 // --- Type Imports ---
@@ -69,6 +70,9 @@ app.get("/api/practice", (req: Request, res: Response) => {
     const buckets = getBuckets();
 
     const bucketMapAsArray = toBucketSets(buckets);
+
+    if (isBucketMapEmpty()) res.json({ cards: [], day: day, retired: true });
+
     const cardsToPractice: Set<Flashcard> = practice(bucketMapAsArray, day);
 
     // Convert the result (Set) to an array for JSON response

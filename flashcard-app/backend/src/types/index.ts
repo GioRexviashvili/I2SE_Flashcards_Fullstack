@@ -9,6 +9,7 @@ import type { Flashcard, AnswerDifficulty, BucketMap } from "@logic/flashcards";
 export interface PracticeSession {
   cards: Flashcard[];
   day: number;
+  retired?: boolean;
 }
 
 /**

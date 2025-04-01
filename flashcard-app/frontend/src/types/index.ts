@@ -30,6 +30,7 @@ export enum AnswerDifficulty {
 export interface PracticeSession {
   cards: Flashcard[];
   day: number;
+  retired?: boolean;
 }
 
 /**
