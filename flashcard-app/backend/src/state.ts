@@ -199,9 +199,9 @@ export function findCard(front: string, back: string): Flashcard | undefined {
  * @returns undedined if this flashcard does not exist in any bucket
  */
 export function findCardBucket(cardToFind: Flashcard): number | undefined {
-  currentBuckets.forEach((buck, numb) => {
-    if (buck.has(cardToFind)) return numb;
-  });
+  for (let i = 0; i < currentBuckets.size; i++) {
+    if (currentBuckets.get(i)?.has(cardToFind)) return i;
+  }
   return undefined;
 }
 
