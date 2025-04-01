@@ -5,7 +5,12 @@ import type { Flashcard } from "../types";
 import { AnswerDifficulty } from "../types"; // Import the enum itself
 
 // Import API service functions
-import { fetchPracticeCards, submitAnswer, advanceDay } from "../services/api";
+import {
+  fetchPracticeCards,
+  submitAnswer,
+  advanceDay,
+  fetchHint,
+} from "../services/api";
 
 // Import the child component
 import FlashcardDisplay from "./FlashcardDisplay";
@@ -19,6 +24,10 @@ function PracticeView() {
   const [error, setError] = useState<string | null>(null);
   const [day, setDay] = useState<number>(0); // Will be updated from API
   const [sessionFinished, setSessionFinished] = useState<boolean>(false);
+
+  const [hint, setHint] = useState<string | null>(null);
+  const [loadingHint, setLoadingHint] = useState(false);
+  const [hintError, setHintError] = useState<string | null>(null);
 
   // --- Data Fetching Function ---
   const loadPracticeCards = async () => {
@@ -94,6 +103,7 @@ function PracticeView() {
         // Move to the next card
         setCurrentCardIndex((prevIndex) => prevIndex + 1);
         setShowBack(false); // Hide the answer for the next card
+        setHint(null);
         console.log(
           `PracticeView: Moving to next card index ${currentCardIndex + 1}`
         );
@@ -116,6 +126,22 @@ function PracticeView() {
       console.error("PracticeView: Failed to advance day:", err);
       setError("Failed to advance to the next day. Please try again.");
       // setIsLoading(false); // Ensure loading is false if you set it true above
+    }
+  };
+
+  const handleGetHint = async () => {
+    if (!currentCard) return;
+    setLoadingHint(true);
+    setHintError(null);
+    setHint(null);
+    try {
+      const fetchedHint = await fetchHint(currentCard);
+      setHint(fetchedHint);
+    } catch (err) {
+      console.error("Failed to fetch hint:", err);
+      setHintError("Could not load hint.");
+    } finally {
+      setLoadingHint(false);
     }
   };
 
@@ -179,6 +205,18 @@ function PracticeView() {
 
       {/* Render the FlashcardDisplay component */}
       <FlashcardDisplay card={currentCard} showBack={showBack} />
+
+      {!showBack && (
+        <div style={{ marginTop: "15px" }}>
+          <button onClick={handleGetHint} disabled={loadingHint}>
+            {loadingHint ? "Loading Hint..." : "Get Hint"}
+          </button>
+          {hint && (
+            <p style={{ color: "red", fontStyle: "italic" }}>Hint: {hint}</p>
+          )}
+          {hintError && <p style={{ color: "red" }}>{hintError}</p>}
+        </div>
+      )}
 
       {/* Render Action Buttons */}
       <div style={{ marginTop: "20px" }}>
