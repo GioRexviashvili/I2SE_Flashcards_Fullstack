@@ -12,7 +12,7 @@ export class Flashcard {
   // Your implementation should work with the Flashcard class as given.
   public readonly front: string;
   public readonly back: string;
-  public readonly hint: string; // weak hint - you will strengthen the spec for getHint()
+  public readonly hint?: string; // weak hint - you will strengthen the spec for getHint()
   public readonly tags: ReadonlyArray<string>;
 
   constructor(

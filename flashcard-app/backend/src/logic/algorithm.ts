@@ -126,7 +126,7 @@ export function update(
   }
 
   // when card is in bucket 4 and answerdifficulty was easy this bucket reached retired bucket
-  // 
+  //
   if (newBucket < 4) {
     // Ensure the new bucket exists
     if (!updatedBuckets.has(newBucket)) {
@@ -148,8 +148,10 @@ export function update(
  */
 
 export function getHint(card: Flashcard): string {
-  const firstWord = card.front.trim().split(" ")[0];
-  return firstWord + "...";
+  if (card.hint) {
+    return card.hint;
+  }
+  return "No hint available for this card.";
 }
 
 /**
